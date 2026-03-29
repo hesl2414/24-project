@@ -4,7 +4,8 @@ from typing import Optional, List
 from sqlalchemy import select, func
 from sqlalchemy.orm import Session
 
-from app.models.chat import ChatSession, ChatMessage, ChatRunLog
+from app.models.chat import ChatSession, ChatMessage
+from app.models.chat_run_log import ChatRunLog
 
 
 class ChatRepository:

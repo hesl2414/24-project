@@ -2,7 +2,8 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from app.repositories.chat_repository import ChatRepository
-from app.models.chat import ChatSession, ChatMessage, ChatRunLog
+from app.models.chat import ChatSession, ChatMessage
+from app.models.chat_run_log import ChatRunLog
 
 
 class ChatService:
