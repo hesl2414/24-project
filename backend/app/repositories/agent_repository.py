@@ -5,6 +5,7 @@ from app.agents.simple_chat_agent import SimpleChatAgent
 from app.agents.secret_code_agent import SecretCodeAgent
 from app.agents.oracle_tb_agent import OracleTBAgent
 from app.agents.ask_support_agent import ASKSupportAgent
+from app.agents.bom_ops_agent import BomOpsAgent
 
 
 class AgentRepository:
@@ -17,6 +18,7 @@ class AgentRepository:
         self.register(SecretCodeAgent())
         self.register(OracleTBAgent())
         self.register(ASKSupportAgent())
+        self.register(BomOpsAgent())
 
     def register(self, agent: BaseAgent):
         self._agents[agent.code] = agent

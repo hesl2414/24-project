@@ -52,26 +52,3 @@ class ChatMessage(Base):
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     session = relationship("ChatSession", back_populates="messages")
-
-
-class ChatRunLog(Base):
-    __tablename__ = "chat_run_log"
-
-    run_id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    chat_id = Column(String(36), ForeignKey("chat_session.chat_id"), nullable=False, index=True)
-
-    agent_code = Column(String(100), nullable=False)
-    user_message = Column(Text, nullable=False)
-    assistant_message = Column(Text, nullable=True)
-
-    status = Column(String(20), nullable=False, default="SUCCESS")  # RUNNING / SUCCESS / ERROR
-    error_message = Column(Text, nullable=True)
-
-    used_tools = Column(Text, nullable=True)
-    model_name = Column(String(100), nullable=True)
-
-    started_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-    ended_at = Column(DateTime, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-
-    session = relationship("ChatSession", back_populates="run_logs")

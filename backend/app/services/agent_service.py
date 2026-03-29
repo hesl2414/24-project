@@ -46,7 +46,7 @@ class AgentService:
             )
             chat_id = session.chat_id
 
-        self.chat_service.add_message(
+        user_msg = self.chat_service.add_message(
             db=db,
             chat_id=chat_id,
             role="user",
@@ -63,16 +63,31 @@ class AgentService:
         )
 
         try:
-            session = self.chat_service.get_chat(db, chat_id)
-            chat_messages = self.chat_service.get_messages(db, chat_id)
+            if agent.supports_custom_invoke():
+                result = agent.invoke(
+                    db=db,
+                    chat_service=self.chat_service,
+                    chat_id=chat_id,
+                    user_id=user_id,
+                    message=message,
+                    run_id=run_log.run_id,
+                )
 
-            llm_messages = self._build_llm_messages(
-                session=session,
-                chat_messages=chat_messages,
-                agent=agent,
-            )
+                assistant_text = (result.get("assistant_message") or "").strip()
+                used_tools = result.get("used_tools", []) or []
 
-            assistant_text = self._call_llm(llm_messages)
+            else:
+                session = self.chat_service.get_chat(db, chat_id)
+                chat_messages = self.chat_service.get_messages(db, chat_id)
+
+                llm_messages = self._build_llm_messages(
+                    session=session,
+                    chat_messages=chat_messages,
+                    agent=agent,
+                )
+
+                assistant_text = self._call_llm(llm_messages)
+                used_tools = []
 
             self.chat_service.add_message(
                 db=db,
@@ -95,7 +110,7 @@ class AgentService:
                 db=db,
                 run_id=run_log.run_id,
                 assistant_message=assistant_text,
-                used_tools=None,
+                used_tools=used_tools,
             )
 
             return {
@@ -103,10 +118,11 @@ class AgentService:
                 "agent_code": agent_code,
                 "user_message": message,
                 "assistant_message": assistant_text,
-                "used_tools": [],
+                "used_tools": used_tools,
             }
 
         except Exception as e:
+            db.rollback()
             self.chat_service.fail_run_log(
                 db=db,
                 run_id=run_log.run_id,
@@ -138,7 +154,7 @@ class AgentService:
                 }
             )
 
-        recent_messages = converted[-self.max_recent_messages :]
+        recent_messages = converted[-self.max_recent_messages:]
         llm_messages.extend(recent_messages)
         return llm_messages
 
@@ -175,7 +191,7 @@ class AgentService:
         if not old_messages:
             return
 
-        summary_source = old_messages[-self.max_summary_source_messages :]
+        summary_source = old_messages[-self.max_summary_source_messages:]
         summary_text = self._summarize_messages(agent, summary_source)
 
         if summary_text:
