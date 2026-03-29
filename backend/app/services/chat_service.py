@@ -8,6 +8,10 @@ from app.repositories.chat_run_log_repository import ChatRunLogRepository
 from app.models.chat import ChatSession, ChatMessage
 from app.models.chat_run_log import ChatRunLog
 
+from app.repositories.chat_run_log_repository import ChatRunLogRepository
+from app.models.chat_run_log import ChatRunLog
+from app.models.chat_run_log import ChatRunStepLog
+
 
 class ChatService:
     def __init__(self, chat_repository: ChatRepository):
@@ -144,5 +148,14 @@ class ChatService:
 
         return run_log
 
-    def get_run_logs(self, db: Session, chat_id: str) -> List[ChatRunLog]:
-        return self.chat_repository.get_run_logs(db, chat_id)
+    def get_run_log(self, db: Session, run_id: str) -> ChatRunLog | None:
+        repo = ChatRunLogRepository(db)
+        return repo.get_run_log(run_id)
+
+    def get_run_logs_by_chat_id(self, db: Session, chat_id: str) -> List[ChatRunLog]:
+        repo = ChatRunLogRepository(db)
+        return repo.get_run_logs_by_chat_id(chat_id)
+
+    def get_step_logs_by_run_id(self, db: Session, run_id: str) -> List[ChatRunStepLog]:
+        repo = ChatRunLogRepository(db)
+        return repo.get_step_logs_by_run_id(run_id)
