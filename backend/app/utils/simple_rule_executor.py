@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Callable
 
-from app.ai.utils.run_logger import RunLogger
-
+from app.utils.run_logger import RunLogger
 
 class SimpleRuleExecutor:
     def __init__(
