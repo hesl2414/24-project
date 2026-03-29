@@ -4,8 +4,8 @@ from typing import Any, List, Optional
 
 from sqlalchemy.orm import Session
 
-from app.models.chat_run_log import ChatRunLog, ChatRunStepLog
 
+from app.models.chat_run_log import ChatRunLog, ChatRunStepLog
 
 def _safe_json(data: Any) -> Optional[str]:
     if data is None:
@@ -102,6 +102,22 @@ class ChatRunLogRepository:
 
     def rollback(self) -> None:
         self.db.rollback()
+
+    def get_run_logs_by_chat_id(self, chat_id: str) -> List[ChatRunLog]:
+        return (
+            self.db.query(ChatRunLog)
+            .filter(ChatRunLog.chat_id == chat_id)
+            .order_by(ChatRunLog.created_at.desc())
+            .all()
+        )
+
+    def get_step_logs_by_run_id(self, run_id: str) -> List[ChatRunStepLog]:
+        return (
+            self.db.query(ChatRunStepLog)
+            .filter(ChatRunStepLog.run_id == run_id)
+            .order_by(ChatRunStepLog.created_at.asc(), ChatRunStepLog.step_no.asc())
+            .all()
+        )
 
 class ChatRunStepLogRepository:
     def __init__(self, db: Session):
