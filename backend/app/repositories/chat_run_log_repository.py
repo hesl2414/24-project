@@ -102,3 +102,34 @@ class ChatRunLogRepository:
 
     def rollback(self) -> None:
         self.db.rollback()
+
+class ChatRunStepLogRepository:
+    def __init__(self, db: Session):
+        self.db = db
+
+    def add_step_log(
+        self,
+        run_id: str,
+        log_type: str,
+        status: str = "SUCCESS",
+        step_no: int | None = None,
+        step_name: str | None = None,
+        tool_name: str | None = None,
+        input_data: Any = None,
+        output_data: Any = None,
+        error_message: str | None = None,
+    ) -> ChatRunStepLog:
+        row = ChatRunStepLog(
+            run_id=run_id,
+            step_no=step_no,
+            step_name=step_name,
+            log_type=log_type,
+            tool_name=tool_name,
+            input_data=_safe_json(input_data),
+            output_data=_safe_json(output_data),
+            status=status,
+            error_message=error_message,
+        )
+        self.db.add(row)
+        self.db.flush()
+        return row

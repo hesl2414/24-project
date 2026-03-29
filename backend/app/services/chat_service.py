@@ -1,7 +1,10 @@
+import json
+from datetime import datetime
 from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from app.repositories.chat_repository import ChatRepository
+from app.repositories.chat_run_log_repository import ChatRunLogRepository
 from app.models.chat import ChatSession, ChatMessage
 from app.models.chat_run_log import ChatRunLog
 
@@ -91,26 +94,55 @@ class ChatService:
         db: Session,
         run_id: str,
         assistant_message: str,
-        used_tools: str | None = None,
-    ) -> ChatRunLog | None:
-        return self.chat_repository.complete_run_log(
-            db=db,
-            run_id=run_id,
-            assistant_message=assistant_message,
-            used_tools=used_tools,
-        )
+        used_tools=None,
+    ) -> ChatRunLog:
+        repo = ChatRunLogRepository(db)
+
+        run_log = repo.get_run_log(run_id)
+        if not run_log:
+            raise ValueError(f"run_log not found: {run_id}")
+
+        if used_tools is None:
+            used_tools_str = None
+        elif isinstance(used_tools, list):
+            used_tools_str = json.dumps(used_tools, ensure_ascii=False)
+        else:
+            used_tools_str = str(used_tools)
+
+        run_log.assistant_message = assistant_message
+        run_log.status = "SUCCESS"
+        run_log.used_tools = used_tools_str
+        run_log.ended_at = datetime.utcnow()
+
+        db.add(run_log)
+        db.commit()
+        db.refresh(run_log)
+
+        return run_log
 
     def fail_run_log(
         self,
         db: Session,
         run_id: str,
         error_message: str,
-    ) -> ChatRunLog | None:
-        return self.chat_repository.fail_run_log(
-            db=db,
-            run_id=run_id,
-            error_message=error_message,
-        )
+    ) -> ChatRunLog:
+        db.rollback()
+
+        repo = ChatRunLogRepository(db)
+
+        run_log = repo.get_run_log(run_id)
+        if not run_log:
+            raise ValueError(f"run_log not found: {run_id}")
+
+        run_log.status = "ERROR"
+        run_log.error_message = error_message
+        run_log.ended_at = datetime.utcnow()
+
+        db.add(run_log)
+        db.commit()
+        db.refresh(run_log)
+
+        return run_log
 
     def get_run_logs(self, db: Session, chat_id: str) -> List[ChatRunLog]:
         return self.chat_repository.get_run_logs(db, chat_id)

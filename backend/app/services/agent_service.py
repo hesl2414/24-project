@@ -122,6 +122,7 @@ class AgentService:
             }
 
         except Exception as e:
+            db.rollback()
             self.chat_service.fail_run_log(
                 db=db,
                 run_id=run_log.run_id,
