@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from typing import Any
 
 from sqlalchemy.orm import Session
@@ -84,12 +85,24 @@ class AgentService:
             )
             app_db.commit()
 
+            # 공통 초기화
+            assistant_text = ""
+            used_tools: list[str] = []
+            metadata: dict[str, Any] = {}
+            executed_nodes: list[str] = []
+
             if agent_code == "equipment":
                 result = agent.invoke(
                     message=message,
                     site_context=site_context,
                     db_manager=self.db_manager,
                 )
+
+                assistant_text = (result.get("answer") or "").strip()
+                used_tools = result.get("used_tools", []) or []
+                metadata = result.get("metadata", {}) or {}
+                executed_nodes = metadata.get("executed_nodes", []) or []
+
             elif agent.supports_custom_invoke():
                 result = agent.invoke(
                     db=app_db,
@@ -102,6 +115,8 @@ class AgentService:
 
                 assistant_text = (result.get("assistant_message") or "").strip()
                 used_tools = result.get("used_tools", []) or []
+                metadata = result.get("metadata", {}) or {}
+                executed_nodes = metadata.get("executed_nodes", []) or []
 
             else:
                 session = self.chat_service.get_chat(app_db, chat_id)
@@ -115,6 +130,24 @@ class AgentService:
 
                 assistant_text = self._call_llm(llm_messages)
                 used_tools = []
+                metadata = {}
+                executed_nodes = []
+
+            # 중복 제거
+            used_tools = list(dict.fromkeys(used_tools))
+            executed_nodes = list(dict.fromkeys(executed_nodes))
+
+            # assistant message의 상세 추적 정보
+            assistant_tool_result = json.dumps(
+                {
+                    "agent_code": agent_code,
+                    "used_tools": used_tools,
+                    "executed_nodes": executed_nodes,
+                    "metadata": metadata,
+                },
+                ensure_ascii=False,
+                default=str,
+            )
 
             self.chat_service.add_message(
                 db=app_db,
@@ -122,6 +155,9 @@ class AgentService:
                 role="assistant",
                 content=assistant_text,
                 agent_code=agent_code,
+                tool_name=f"{agent_code}_graph" if executed_nodes else None,
+                tool_args=message if executed_nodes else None,
+                tool_result=assistant_tool_result if (used_tools or executed_nodes or metadata) else None,
             )
 
             updated_messages = self.chat_service.get_messages(app_db, chat_id)
@@ -133,12 +169,24 @@ class AgentService:
                 agent=agent,
             )
 
+            # run_log에는 요약 형태로 저장
+            run_log_used_tools = json.dumps(
+                {
+                    "used_tools": used_tools,
+                    "executed_nodes": executed_nodes,
+                },
+                ensure_ascii=False,
+                default=str,
+            ) if (used_tools or executed_nodes) else None
+
             self.chat_service.complete_run_log(
                 db=app_db,
                 run_id=run_log.run_id,
                 assistant_message=assistant_text,
-                used_tools=used_tools,
+                used_tools=run_log_used_tools,
             )
+
+            app_db.commit()
 
             return {
                 "chat_id": chat_id,
@@ -146,6 +194,10 @@ class AgentService:
                 "user_message": message,
                 "assistant_message": assistant_text,
                 "used_tools": used_tools,
+                "metadata": {
+                    **metadata,
+                    "executed_nodes": executed_nodes,
+                },
             }
 
         except Exception as e:

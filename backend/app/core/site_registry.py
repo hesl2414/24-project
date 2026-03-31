@@ -1,3 +1,6 @@
+# =========================================
+# app/core/site_registry.py
+# =========================================
 from app.core.site_context import SiteContext
 
 
@@ -13,29 +16,19 @@ SITE_CONTEXTS = {
         table_names={
             "source": "EAM_MD_NEW_EQPID_IF",
             "request": "EAM_EQP_REQUEST",
-            "final": "EAM_EQP_MASTER",
-            "error_log": "EAM_EQP_ERROR_LOG",
+
+            # final 여러 개
+            "final_main": "EAM_EQP_MASTER",
+            "final_attr": "EAM_EQP_ATTR",
+            "final_hist": "EAM_EQP_HIST",
+
+            # error log 3종류
+            "error_log_etl": "EAM_EQP_ETL_ERR_LOG",
+            "error_log_request_process": "EAM_EQP_REQ_PROC_ERR_LOG",
+            "error_log_request_validation": "EAM_EQP_REQ_VALID_ERR_LOG",
         },
         alias_profile="cn",
         mapping_profile="cn",
-        extra_config={},
-    ),
-    "WS": SiteContext(
-        site_code="WS",
-        db_roles={
-            "source": "eam_if_ws",
-            "request": "md_req_ws",
-            "final": "eam_master_ws",
-            "error_log": "batch_log_ws",
-        },
-        table_names={
-            "source": "EAM_MD_NEW_EQPID_IF",
-            "request": "EAM_EQP_REQUEST",
-            "final": "EAM_EQP_MASTER",
-            "error_log": "EAM_EQP_ERROR_LOG",
-        },
-        alias_profile="ws",
-        mapping_profile="ws",
         extra_config={},
     ),
 }
