@@ -1,0 +1,27 @@
+/* ============================================
+   src/components/admin/StatCard.css
+   ============================================ */
+.stat-card {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.stat-card-title {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.stat-card-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+}
+
+.stat-card-subtitle {
+  margin-top: 8px;
+  color: #888;
+  font-size: 12px;
+}

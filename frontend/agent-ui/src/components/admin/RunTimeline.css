@@ -1,0 +1,73 @@
+/* ============================================
+   src/components/admin/RunTimeline.css
+   ============================================ */
+.run-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.run-step {
+  display: flex;
+  gap: 14px;
+}
+
+.run-step-left {
+  width: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.run-step-order {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ececec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.run-step-right {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.run-step-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.run-step-type {
+  margin-left: 10px;
+  color: #777;
+  font-size: 12px;
+}
+
+.run-step-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 8px;
+  color: #666;
+  font-size: 12px;
+}
+
+.run-step-error {
+  margin-top: 10px;
+  color: #b00020;
+  font-size: 13px;
+}
+
+.run-step-json-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}

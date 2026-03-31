@@ -1,0 +1,71 @@
+/* ============================================
+   src/components/admin/AdminLayout.css
+   ============================================ */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f7f7f8;
+  color: #222;
+}
+
+.admin-sidebar {
+  width: 240px;
+  background: #ffffff;
+  border-right: 1px solid #e5e5e5;
+  padding: 24px 16px;
+}
+
+.admin-logo {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-nav-link {
+  text-decoration: none;
+  color: #333;
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.admin-nav-link:hover {
+  background: #f0f0f0;
+}
+
+.admin-nav-link.active {
+  background: #ececec;
+  font-weight: 600;
+}
+
+.admin-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-header {
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 20px 24px;
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.admin-header p {
+  margin: 6px 0 0;
+  color: #666;
+}
+
+.admin-content {
+  padding: 24px;
+}

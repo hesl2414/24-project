@@ -16,6 +16,13 @@ def get_db():
     finally:
         db.close()
 
+def get_app_db():
+    db: Session = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 
 chat_repository = ChatRepository()
 agent_repository = AgentRepository()

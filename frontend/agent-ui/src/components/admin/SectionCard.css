@@ -1,0 +1,26 @@
+/* ============================================
+   src/components/admin/SectionCard.css
+   ============================================ */
+.section-card {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.section-card-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-card-header h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.section-card-body {
+  padding: 16px;
+}

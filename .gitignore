@@ -1,36 +1,43 @@
-# Frontend
-
-# Logs
-frontend/logs
-frontend/*.log
-frontend/npm-debug.log*
-frontend/yarn-debug.log*
-frontend/yarn-error.log*
-frontend/pnpm-debug.log*
-frontend/lerna-debug.log*
-
-frontend/node_modules/
-frontend/.npm_cache
-frontend/dist/
-frontend/build/
-frontend/dist-ssr
-frontend/*.local
-
-frontend/.env
-
-# Backend
-
+# -------------------------------------------------------------------
+# Backend (Python/FastAPI 등)
+# -------------------------------------------------------------------
 backend/.env
 backend/__pycache__/
 backend/.venv/
 
-# Editor directories and files
+# -------------------------------------------------------------------
+# Frontend (React/Vite 등)
+# -------------------------------------------------------------------
+# frontend 하위 모든 프로젝트의 node_modules 및 캐시 제외
+frontend/**/node_modules/
+frontend/**/.npm_cache/
+frontend/**/.npm-cache/
+frontend/**/.vite/
+
+# 로그 파일
+frontend/**/*.log
+frontend/**/npm-debug.log*
+frontend/**/yarn-debug.log*
+
+# 빌드 결과물
+frontend/**/dist/
+frontend/**/build/
+frontend/**/dist-ssr/
+
+# 환경 변수 (매우 중요)
+frontend/**/.env
+frontend/**/.env*.local
+
+# -------------------------------------------------------------------
+# Editor & OS
+# -------------------------------------------------------------------
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+.DS_Store
+Thumbs.db
