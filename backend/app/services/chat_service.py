@@ -23,12 +23,14 @@ class ChatService:
         user_id: str,
         title: str = "New Chat",
         agent_code: Optional[str] = None,
+        site_code: Optional[str] = None,
     ) -> ChatSession:
         return self.chat_repository.create_session(
             db=db,
             user_id=user_id,
             title=title,
             agent_code=agent_code,
+            site_code=site_code,
         )
 
     def get_chat(self, db: Session, chat_id: str) -> Optional[ChatSession]:

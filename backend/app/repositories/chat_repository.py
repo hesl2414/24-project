@@ -15,11 +15,13 @@ class ChatRepository:
         user_id: str,
         title: str,
         agent_code: Optional[str] = None,
+        site_code: str | None = None,
     ) -> ChatSession:
         session = ChatSession(
             user_id=user_id,
             title=title,
             agent_code=agent_code,
+            site_code=site_code,
         )
         db.add(session)
         db.flush()
@@ -167,5 +169,13 @@ class ChatRepository:
             select(ChatRunLog)
             .where(ChatRunLog.chat_id == chat_id)
             .order_by(ChatRunLog.created_at.asc())
+        )
+        return list(db.execute(stmt).scalars().all())
+
+    def get_run_logs_by_chat_id(self, db: Session, chat_id: str) -> list[ChatRunLog]:
+        stmt = (
+            select(ChatRunLog)
+            .where(ChatRunLog.chat_id == chat_id)
+            .order_by(ChatRunLog.started_at.desc(), ChatRunLog.created_at.desc())
         )
         return list(db.execute(stmt).scalars().all())

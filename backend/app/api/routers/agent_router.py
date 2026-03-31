@@ -32,7 +32,7 @@ def invoke_agent(
 ):
     try:
         result = agent_service.invoke_agent(
-            db=db,
+            app_db=db,
             agent_code=agent_code,
             user_id=request.user_id,
             message=request.message,

@@ -7,12 +7,21 @@ from sqlalchemy.orm import Session
 from app.repositories.agent_repository import AgentRepository
 from app.services.chat_service import ChatService
 from app.llm.llm_factory import LLMFactory
+from app.services.site_context_service import SiteContextService
 
 
 class AgentService:
-    def __init__(self, agent_repository: AgentRepository, chat_service: ChatService):
+    def __init__(
+        self,
+        agent_repository: AgentRepository,
+        chat_service: ChatService,
+        db_manager,
+        site_context_service: SiteContextService,
+    ):
         self.agent_repository = agent_repository
         self.chat_service = chat_service
+        self.db_manager = db_manager
+        self.site_context_service = site_context_service
 
         self.max_recent_messages = 12
         self.summary_trigger_count = 20
@@ -23,7 +32,7 @@ class AgentService:
 
     def invoke_agent(
         self,
-        db: Session,
+        app_db: Session,
         agent_code: str,
         user_id: str,
         message: str,
@@ -34,38 +43,56 @@ class AgentService:
             raise ValueError(f"등록되지 않은 agent code 입니다: {agent_code}")
 
         if chat_id:
-            session = self.chat_service.get_chat(db, chat_id)
+            session = self.chat_service.get_chat(app_db, chat_id)
             if not session:
                 raise ValueError(f"존재하지 않는 chat_id 입니다: {chat_id}")
         else:
             session = self.chat_service.create_chat(
-                db=db,
+                db=app_db,
                 user_id=user_id,
                 title=message[:30] if message else "New Chat",
                 agent_code=agent_code,
+                site_code=None,
             )
+            app_db.flush()
             chat_id = session.chat_id
 
-        user_msg = self.chat_service.add_message(
-            db=db,
-            chat_id=chat_id,
-            role="user",
-            content=message,
-            agent_code=agent_code,
-        )
+        site_context = None
+        if agent_code == "equipment":
+            if not session.site_code:
+                raise ValueError("equipment agent는 chat_session.site_code가 필요합니다.")
+            site_context = self.site_context_service.get_by_site_code(session.site_code)
 
         run_log = self.chat_service.create_run_log(
-            db=db,
+            db=app_db,
             chat_id=chat_id,
             agent_code=agent_code,
             user_message=message,
             model_name=LLMFactory.get_model_name(),
         )
 
+        app_db.commit()
+        app_db.refresh(run_log)
+
         try:
-            if agent.supports_custom_invoke():
+            self.chat_service.add_message(
+                db=app_db,
+                chat_id=chat_id,
+                role="user",
+                content=message,
+                agent_code=agent_code,
+            )
+            app_db.commit()
+
+            if agent_code == "equipment":
                 result = agent.invoke(
-                    db=db,
+                    message=message,
+                    site_context=site_context,
+                    db_manager=self.db_manager,
+                )
+            elif agent.supports_custom_invoke():
+                result = agent.invoke(
+                    db=app_db,
                     chat_service=self.chat_service,
                     chat_id=chat_id,
                     user_id=user_id,
@@ -77,8 +104,8 @@ class AgentService:
                 used_tools = result.get("used_tools", []) or []
 
             else:
-                session = self.chat_service.get_chat(db, chat_id)
-                chat_messages = self.chat_service.get_messages(db, chat_id)
+                session = self.chat_service.get_chat(app_db, chat_id)
+                chat_messages = self.chat_service.get_messages(app_db, chat_id)
 
                 llm_messages = self._build_llm_messages(
                     session=session,
@@ -90,16 +117,16 @@ class AgentService:
                 used_tools = []
 
             self.chat_service.add_message(
-                db=db,
+                db=app_db,
                 chat_id=chat_id,
                 role="assistant",
                 content=assistant_text,
                 agent_code=agent_code,
             )
 
-            updated_messages = self.chat_service.get_messages(db, chat_id)
+            updated_messages = self.chat_service.get_messages(app_db, chat_id)
             self._refresh_summary_if_needed(
-                db=db,
+                db=app_db,
                 chat_id=chat_id,
                 session=session,
                 chat_messages=updated_messages,
@@ -107,7 +134,7 @@ class AgentService:
             )
 
             self.chat_service.complete_run_log(
-                db=db,
+                db=app_db,
                 run_id=run_log.run_id,
                 assistant_message=assistant_text,
                 used_tools=used_tools,
@@ -122,12 +149,19 @@ class AgentService:
             }
 
         except Exception as e:
-            db.rollback()
-            self.chat_service.fail_run_log(
-                db=db,
-                run_id=run_log.run_id,
-                error_message=str(e),
-            )
+            original_error = str(e)
+
+            try:
+                app_db.rollback()
+                self.chat_service.fail_run_log(
+                    db=app_db,
+                    run_id=run_log.run_id,
+                    error_message=original_error,
+                )
+                app_db.commit()
+            except Exception as log_error:
+                print(f"fail_run_log error: {log_error}; original_error: {original_error}")
+
             raise
 
     def _build_llm_messages(
@@ -212,29 +246,36 @@ class AgentService:
         lines = [f"{m['role']}: {m['content']}" for m in messages]
         summary_input = "\n".join(lines)
 
-        client = LLMFactory.get_client()
-        model = LLMFactory.get_model_name()
+        llm = LLMFactory.get_llm()
 
-        response = client.responses.create(
-            model=model,
-            instructions=(
-                f"You are summarizing prior conversation for {agent.name}.\n"
-                "Summarize in Korean.\n"
-                "Keep only important context, user goals, entities, unresolved issues, and prior conclusions.\n"
-                "Be concise and factual."
-            ),
-            input=summary_input,
-        )
+        prompt_messages = [
+            {
+                "role": "system",
+                "content": (
+                    f"You are summarizing prior conversation for {agent.name}.\n"
+                    "Summarize in Korean.\n"
+                    "Keep only important context, user goals, entities, unresolved issues, and prior conclusions.\n"
+                    "Be concise and factual."
+                ),
+            },
+            {
+                "role": "user",
+                "content": summary_input,
+            },
+        ]
 
-        return (response.output_text or "").strip()
+        response = llm.invoke(prompt_messages)
+
+        if hasattr(response, "content"):
+            return (response.content or "").strip()
+
+        return str(response).strip()
 
     def _call_llm(self, llm_messages: list[dict[str, str]]) -> str:
-        client = LLMFactory.get_client()
-        model = LLMFactory.get_model_name()
+        llm = LLMFactory.get_llm()
+        response = llm.invoke(llm_messages)
 
-        response = client.responses.create(
-            model=model,
-            input=llm_messages,
-        )
+        if hasattr(response, "content"):
+            return (response.content or "").strip()
 
-        return (response.output_text or "").strip()
+        return str(response).strip()
