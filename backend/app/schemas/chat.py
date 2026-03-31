@@ -8,12 +8,13 @@ class ChatSessionCreate(BaseModel):
     user_id: str = Field(..., description="사용자 ID")
     title: Optional[str] = "New Chat"
     agent_code: Optional[str] = None
-
+    site_code: Optional[str] = None
 
 class ChatSessionResponse(BaseModel):
     chat_id: str
     user_id: str
     title: str
+    site_code: Optional[str] = None
     agent_code: Optional[str] = None
     summary_text: Optional[str] = None
     summary_updated_at: Optional[datetime] = None

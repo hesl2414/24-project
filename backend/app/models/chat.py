@@ -14,9 +14,10 @@ class ChatSession(Base):
     user_id = Column(String(100), nullable=False, index=True)
     title = Column(String(200), nullable=False, default="New Chat")
     agent_code = Column(String(100), nullable=True)
+    site_code = Column(String(30), nullable=True, index=True)
 
-    summary_text = Column(Text, nullable=True)  # 추가
-    summary_updated_at = Column(DateTime, nullable=True)  # 추가
+    summary_text = Column(Text, nullable=True)
+    summary_updated_at = Column(DateTime, nullable=True)
 
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)

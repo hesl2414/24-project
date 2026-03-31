@@ -25,6 +25,7 @@ def create_chat(
         user_id=request.user_id,
         title=request.title or "New Chat",
         agent_code=request.agent_code,
+        site_code=request.site_code,
     )
     db.commit()
     db.refresh(session)
@@ -42,7 +43,7 @@ def get_chat_detail(
         raise HTTPException(status_code=404, detail="Chat session not found")
 
     messages = chat_service.get_messages(db, chat_id)
-    run_logs = chat_service.get_run_logs(db, chat_id)
+    run_logs = chat_service.get_step_logs_by_run_id(db, chat_id)
 
     return {
         "session": session,
