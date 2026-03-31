@@ -5,6 +5,7 @@ from app.core.settings import settings
 from app.api.routers.chat_router import router as chat_router
 from app.api.routers.agent_router import router as agent_router
 from app.api.routers.chat_run_log_router import router as chat_run_log_router
+from app.api.routers.admin_router import router as admin_router
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -32,6 +33,7 @@ app.add_middleware(
 app.include_router(chat_router)
 app.include_router(agent_router)
 app.include_router(chat_run_log_router)
+app.include_router(admin_router)
 
 @app.get("/")
 def root():

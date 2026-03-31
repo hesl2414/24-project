@@ -1,0 +1,32 @@
+/* ============================================
+   src/components/admin/SearchFilterBar.css
+   ============================================ */
+.search-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: #fff;
+  padding: 14px;
+  border: 1px solid #e6e6e6;
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
+
+.search-filter-bar input,
+.search-filter-bar select,
+.search-filter-bar button {
+  height: 38px;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  padding: 0 12px;
+  background: #fff;
+}
+
+.search-filter-bar button {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.search-filter-bar button:hover {
+  background: #f5f5f5;
+}

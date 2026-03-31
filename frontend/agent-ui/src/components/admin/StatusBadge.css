@@ -1,0 +1,27 @@
+/* ============================================
+   src/components/admin/StatusBadge.css
+   ============================================ */
+.status-badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid #ddd;
+  background: #f7f7f7;
+}
+
+.status-running {
+  background: #efefef;
+  color: #444;
+}
+
+.status-success {
+  background: #f0f0f0;
+  color: #222;
+}
+
+.status-error {
+  background: #f5f5f5;
+  color: #b00020;
+}

@@ -1,0 +1,47 @@
+/* ============================================
+   src/components/admin/MessageBubble.css
+   ============================================ */
+.message-bubble {
+  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+}
+
+.message-bubble + .message-bubble {
+  margin-top: 12px;
+}
+
+.message-bubble-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+.message-bubble-content {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+}
+
+.role-user {
+  background: #fcfcfc;
+}
+
+.role-assistant {
+  background: #fff;
+}
+
+.role-tool,
+.role-system {
+  background: #fafafa;
+}
+
+.message-tool-box {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}

@@ -1,0 +1,43 @@
+/* ============================================
+   src/components/admin/AdminTable.css
+   ============================================ */
+.admin-table-wrap {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  text-align: left;
+  background: #fafafa;
+  border-bottom: 1px solid #eaeaea;
+  padding: 12px;
+  font-size: 13px;
+}
+
+.admin-table td {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 12px;
+  vertical-align: top;
+  font-size: 14px;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table a {
+  color: #222;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.admin-table a:hover {
+  text-decoration: underline;
+}
