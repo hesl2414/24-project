@@ -9,7 +9,7 @@ from app.repositories.agent_repository import AgentRepository
 from app.services.chat_service import ChatService
 from app.llm.llm_factory import LLMFactory
 from app.services.site_context_service import SiteContextService
-
+from app.repositories.chat_run_log_repository import ChatRunStepLogRepository
 
 class AgentService:
     def __init__(
@@ -18,6 +18,7 @@ class AgentService:
         chat_service: ChatService,
         db_manager,
         site_context_service: SiteContextService,
+        chat_run_step_log_repository: ChatRunStepLogRepository | None = None,
     ):
         self.agent_repository = agent_repository
         self.chat_service = chat_service
@@ -40,6 +41,8 @@ class AgentService:
         chat_id: str | None = None,
     ) -> dict[str, Any]:
         agent = self.agent_repository.get(agent_code)
+        step_log_repo = ChatRunStepLogRepository(app_db)
+
         if not agent:
             raise ValueError(f"등록되지 않은 agent code 입니다: {agent_code}")
 
@@ -59,9 +62,9 @@ class AgentService:
             chat_id = session.chat_id
 
         site_context = None
-        if agent_code == "equipment":
+        if agent_code in {"equipment", "equipment_md"}:
             if not session.site_code:
-                raise ValueError("equipment agent는 chat_session.site_code가 필요합니다.")
+                raise ValueError(f"{agent_code} agent는 chat_session.site_code가 필요합니다.")
             site_context = self.site_context_service.get_by_site_code(session.site_code)
 
         run_log = self.chat_service.create_run_log(
@@ -91,7 +94,7 @@ class AgentService:
             metadata: dict[str, Any] = {}
             executed_nodes: list[str] = []
 
-            if agent_code == "equipment":
+            if agent_code in {"equipment", "equipment_md"}:
                 result = agent.invoke(
                     message=message,
                     site_context=site_context,
@@ -102,6 +105,14 @@ class AgentService:
                 used_tools = result.get("used_tools", []) or []
                 metadata = result.get("metadata", {}) or {}
                 executed_nodes = metadata.get("executed_nodes", []) or []
+                step_trace = metadata.get("step_trace", []) or []
+
+                if step_trace:
+                    self.save_run_step_logs(
+                        app_db=app_db,
+                        run_id=run_log.run_id,
+                        step_trace=step_trace,
+                    )
 
             elif agent.supports_custom_invoke():
                 result = agent.invoke(
@@ -331,3 +342,17 @@ class AgentService:
             return (response.content or "").strip()
 
         return str(response).strip()
+    
+    def save_run_step_logs(self, app_db: Session, run_id: str, step_trace: list[dict]):
+        repo = ChatRunStepLogRepository(app_db)
+
+        for idx, step in enumerate(step_trace, start=1):
+            repo.add_step_log(
+                run_id=run_id,
+                log_type=step.get("step_type", "STATE"),
+                step_no=idx,
+                step_name=step.get("step_name"),
+                input_data=None,
+                output_data=step.get("step_data"),
+                status="SUCCESS",
+            )
