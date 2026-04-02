@@ -1,16 +1,18 @@
 .status-badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   border-radius: 999px;
-  padding: 4px 10px;
+  padding: 5px 11px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
   border: 1px solid var(--color-border);
-  background: var(--color-chip-bg);
+  background: #eef5fa;
 }
 
 .status-running {
-  background: var(--color-chip-bg);
-  color: var(--color-text-muted);
+  background: #edf5fb;
+  color: var(--color-primary);
+  border-color: rgba(0, 44, 95, 0.12);
 }
 
 .status-success {
