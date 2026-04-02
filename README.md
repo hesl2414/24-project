@@ -41,3 +41,10 @@ LangChain & LangGraph: 단순한 체인 구조를 넘어, 순환(Cycle)이 가�
 - Data & Infrastructure  
 RESTful API: 프론트엔드와 백엔드 간의 효율적인 리소스 중심 통신 아키텍처.  
 Git / GitHub: 기능별 브랜치 전략(feature/)을 활용한 협업 및 버전 관리.
+
+## 🛠 Upcoming Features (TODO)
+
+현재 AI Agent의 지능화 및 실무 적용을 목표로 백엔드와 에이전트 로직을 집중적으로 개발하고 있습니다.
+
+![alt text](image.png)
+![alt text](image-1.png)
