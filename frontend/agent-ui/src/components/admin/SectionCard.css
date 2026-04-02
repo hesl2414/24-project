@@ -1,16 +1,13 @@
-/* ============================================
-   src/components/admin/SectionCard.css
-   ============================================ */
 .section-card {
-  background: #fff;
-  border: 1px solid #e6e6e6;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 14px;
   overflow: hidden;
 }
 
 .section-card-header {
   padding: 14px 16px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: space-between;

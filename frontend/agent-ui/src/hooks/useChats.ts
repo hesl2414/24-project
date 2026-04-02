@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createChat, getChatDetail, getUserChats } from "../api/chatApi";
 import { invokeAgent } from "../api/agentApi";
+import { useSitePreference } from "./useSitePreference";
 import type { ChatDetailResponse, ChatSession } from "../types/chat";
 
 type UseChatsParams = {
@@ -12,7 +13,7 @@ export function useChats({
   selectedAgentCode,
   setSelectedAgentCode,
 }: UseChatsParams) {
-  const [site, setSite] = useState("KOR-SEOUL");
+  const { site, setSite } = useSitePreference();
   const [userId, setUserId] = useState("user1");
 
   const [chats, setChats] = useState<ChatSession[]>([]);
