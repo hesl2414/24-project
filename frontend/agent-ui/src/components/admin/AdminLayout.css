@@ -1,24 +1,27 @@
-/* ============================================
-   src/components/admin/AdminLayout.css
-   ============================================ */
 .admin-layout {
   display: flex;
   min-height: 100vh;
-  background: #f7f7f8;
-  color: #222;
+  background: var(--color-app-bg);
+  color: var(--color-text-main);
 }
 
 .admin-sidebar {
-  width: 240px;
-  background: #ffffff;
-  border-right: 1px solid #e5e5e5;
-  padding: 24px 16px;
+  width: 290px;
+  background: var(--color-sidebar-bg);
+  border-right: 1px solid var(--color-border);
+  padding: 12px;
+}
+
+.admin-sidebar-top {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .admin-logo {
   font-size: 22px;
   font-weight: 700;
-  margin-bottom: 24px;
+  margin: 0 4px 20px;
 }
 
 .admin-nav {
@@ -29,19 +32,20 @@
 
 .admin-nav-link {
   text-decoration: none;
-  color: #333;
-  padding: 10px 12px;
-  border-radius: 10px;
+  color: var(--color-text-main);
+  padding: 12px 14px;
+  border-radius: 12px;
   transition: background 0.2s ease;
 }
 
 .admin-nav-link:hover {
-  background: #f0f0f0;
+  background: var(--color-surface);
 }
 
 .admin-nav-link.active {
-  background: #ececec;
+  background: var(--color-surface);
   font-weight: 600;
+  box-shadow: 0 1px 2px var(--color-shadow-soft);
 }
 
 .admin-main {
@@ -51,8 +55,8 @@
 }
 
 .admin-header {
-  background: #fff;
-  border-bottom: 1px solid #e5e5e5;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
   padding: 20px 24px;
 }
 
@@ -63,7 +67,7 @@
 
 .admin-header p {
   margin: 6px 0 0;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .admin-content {

@@ -14,7 +14,7 @@ export interface ChatSessionItem {
   chat_id: string;
   user_id: string;
   title: string;
-  selected_agent_code: string;
+  agent_code: string;
   last_message_at: string | null;
   last_run_status: RunStatus | null;
   created_at: string;
@@ -37,7 +37,7 @@ export interface ChatSessionDetail {
   chat_id: string;
   user_id: string;
   title: string;
-  selected_agent_code: string;
+  agent_code: string;
   summary_text?: string | null;
   created_at: string;
   updated_at: string;

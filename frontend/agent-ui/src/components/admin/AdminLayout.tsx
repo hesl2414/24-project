@@ -1,13 +1,27 @@
-// ============================================
-// src/components/admin/AdminLayout.tsx
-// ============================================
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import SiteSelect from "../chat/SiteSelect";
+import { isAdminSite } from "../../config/theme";
+import { useSitePreference } from "../../hooks/useSitePreference";
 import "./AdminLayout.css";
 
 export default function AdminLayout() {
+  const navigate = useNavigate();
+  const { site, setSite } = useSitePreference();
+
+  function handleSiteChange(value: string) {
+    setSite(value);
+    if (!isAdminSite(value)) {
+      navigate("/chat");
+    }
+  }
+
   return (
     <div className="admin-layout">
       <aside className="admin-sidebar">
+        <div className="admin-sidebar-top">
+          <SiteSelect site={site} onChange={handleSiteChange} />
+        </div>
+
         <div className="admin-logo">AI Admin</div>
 
         <nav className="admin-nav">
