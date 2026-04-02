@@ -7,6 +7,7 @@ from app.agents.oracle_tb_agent import OracleTBAgent
 from app.agents.ask_support_agent import ASKSupportAgent
 from app.agents.bom_ops_agent import BomOpsAgent
 from app.agents.equipment_agent import EquipmentAgent
+from app.agents.equipment_md_agent import EquipmentMDAgent
 
 
 class AgentRepository:
@@ -17,10 +18,7 @@ class AgentRepository:
     def _register_default_agents(self):
         self.register(SimpleChatAgent())
         self.register(SecretCodeAgent())
-        self.register(OracleTBAgent())
-        self.register(ASKSupportAgent())
-        self.register(BomOpsAgent())
-        self.register(EquipmentAgent())
+        self.register(EquipmentMDAgent())
 
     def register(self, agent: BaseAgent):
         self._agents[agent.code] = agent

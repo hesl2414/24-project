@@ -249,18 +249,18 @@ class AdminService:
         for step in steps:
             result.append(
                 RunStepItemResponse(
-                    step_id=step.step_id,
+                    step_id=step.step_log_id,
                     run_id=step.run_id,
-                    step_order=step.step_order,
-                    node_name=step.node_name,
-                    step_type=step.step_type,
+                    step_order=step.step_order or step.step_no,
+                    node_name=step.step_name,
+                    step_type=step.log_type,
                     status=step.status,
-                    input_snapshot=parse_json_field(step.input_snapshot),
-                    output_snapshot=parse_json_field(step.output_snapshot),
+                    input_snapshot=parse_json_field(step.input_data),
+                    output_snapshot=parse_json_field(step.output_data),
                     error_message=step.error_message,
-                    started_at=step.started_at,
-                    ended_at=step.ended_at,
-                    duration_ms=self._duration_ms(step.started_at, step.ended_at),
+                    started_at=step.created_at,
+                    ended_at=step.created_at,
+                    duration_ms=None,
                 )
             )
         return result

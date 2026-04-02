@@ -19,6 +19,13 @@ class Settings:
         "DATABASE_URL",
         f"sqlite:///{os.getenv('SQLITE_DB_PATH', './practice_agent.db')}"
     )
+
+    SIHIF_DB_URL=DATABASE_URL
+    SYSTEM_DB_URL=DATABASE_URL
+    SYSDAT_DB_URL=DATABASE_URL
+    MOS_DB_URL=DATABASE_URL
+
+
     # 공통
     LLM_PROVIDER: str = os.getenv("LLM_PROVIDER", "openai").lower()
     LLM_TEMPERATURE: float = float(os.getenv("LLM_TEMPERATURE", "0"))
