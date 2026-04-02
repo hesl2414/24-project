@@ -2,6 +2,7 @@ export type ChatSession = {
   chat_id: string;
   user_id: string;
   title: string;
+  site_code?: string | null;
   agent_code?: string | null;
   created_at?: string;
   updated_at?: string;
@@ -44,6 +45,7 @@ export type CreateChatRequest = {
   user_id: string;
   title?: string;
   agent_code?: string | null;
+  site_code?: string | null;
 };
 
 export type InvokeAgentRequest = {

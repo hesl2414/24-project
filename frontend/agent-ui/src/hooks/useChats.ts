@@ -106,8 +106,9 @@ export function useChats({
   async function createNewChat() {
     try {
       setError(null);
-
+      
       const created = await createChat({
+        site_code: site,
         user_id: userId,
         title: "New Chat",
         agent_code: selectedAgentCode,
