@@ -11,9 +11,10 @@ class DBManager:
 
         db_url_map = {
             "app": settings.DATABASE_URL,
-            # 나중에 멀티 DB 붙일 때 여기에 추가
-            # "eam_if_cn": settings.EAM_IF_CN_DB_URL,
-            # "md_req_cn": settings.MD_REQ_CN_DB_URL,
+            "sihif": settings.SIHIF_DB_URL,
+            "system": settings.SYSTEM_DB_URL,
+            "sysdat": settings.SYSDAT_DB_URL,
+            "mos": settings.MOS_DB_URL,
         }
 
         for db_name, db_url in db_url_map.items():

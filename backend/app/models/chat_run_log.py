@@ -23,6 +23,9 @@ class ChatRunLog(Base):
     used_tools = Column(Text, nullable=True)
     model_name = Column(String(100), nullable=True)
 
+    raw_input = Column(Text)   # ⭐ 추가
+    raw_output = Column(Text)  # ⭐ 추가
+
     started_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     ended_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
@@ -44,6 +47,8 @@ class ChatRunStepLog(Base):
 
     step_no = Column(Integer, nullable=True)
     step_name = Column(String(200), nullable=True)
+    
+    step_order = Column(Integer)  # ⭐ 추가
 
     log_type = Column(String(50), nullable=False)   # ROUTE / RULEBOOK / STEP / SKIP / ANSWER / ERROR / END
     tool_name = Column(String(200), nullable=True)

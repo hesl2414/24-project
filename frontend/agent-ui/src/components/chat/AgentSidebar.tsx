@@ -20,26 +20,29 @@ export default function AgentSidebar({
   onReloadAgents,
 }: AgentSidebarProps) {
   return (
-    <aside className="hidden h-full w-[320px] shrink-0 border-l border-[var(--color-border)] bg-[var(--color-panel-bg)] xl:block">
-      <div className="flex h-full flex-col">
-        <div className="border-b border-[var(--color-border)] p-4">
-          <div className="flex items-center justify-between">
+    <aside className="hidden h-full w-[332px] shrink-0 border-l border-[var(--color-border)] bg-[var(--color-panel-bg)] xl:block">
+      <div className="flex h-full flex-col bg-[linear-gradient(180deg,rgba(255,255,255,0.28)_0%,rgba(255,255,255,0.14)_100%)]">
+        <div className="border-b border-[var(--color-border)] p-5">
+          <div className="flex items-center justify-between gap-3">
             <div>
-              <div className="text-sm font-medium text-[var(--color-text-main)]">Agents</div>
+              <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-text-subtle)]">
+                Agent Control
+              </div>
+              <div className="mt-2 text-lg font-semibold text-[var(--color-text-main)]">Available Agents</div>
               <div className="mt-1 text-xs text-[var(--color-text-muted)]">사용할 agent를 선택하세요</div>
             </div>
             <button
               onClick={onReloadAgents}
-              className="rounded-lg px-3 py-2 text-xs text-[var(--color-text-muted)] transition hover:bg-[var(--color-surface)]"
+              className="rounded-full bg-white px-3 py-2 text-xs font-semibold text-[var(--color-text-muted)] ring-1 ring-[var(--color-border)] transition hover:bg-[var(--color-surface-hover)]"
             >
               Refresh
             </button>
           </div>
         </div>
 
-        <div className="flex-1 space-y-2 overflow-y-auto p-3">
+        <div className="flex-1 space-y-3 overflow-y-auto p-4">
           {isLoadingAgents ? (
-            <div className="rounded-2xl border border-dashed border-[var(--color-input-border)] bg-[var(--color-surface)] p-4 text-sm text-[var(--color-text-muted)]">
+            <div className="rounded-[22px] border border-dashed border-[var(--color-input-border)] bg-white/80 p-4 text-sm text-[var(--color-text-muted)] shadow-[var(--shadow-soft)]">
               Agent 목록 불러오는 중...
             </div>
           ) : (
@@ -49,20 +52,22 @@ export default function AgentSidebar({
                 <button
                   key={agent.code}
                   onClick={() => onSelectAgent(agent.code)}
-                  className={`w-full rounded-2xl border p-4 text-left transition ${
+                  className={`w-full rounded-[22px] border bg-white/86 p-4 text-left transition-all ${
                     active
-                      ? "border-[var(--color-primary)] bg-[var(--color-surface)] shadow-sm"
-                      : "border-[var(--color-border)] bg-[var(--color-surface)]/70 hover:bg-[var(--color-surface)]"
+                      ? "border-[var(--color-accent)] ring-1 ring-[var(--color-accent)] shadow-[var(--shadow-soft)]"
+                      : "border-[var(--color-border)] hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-hover)]"
                   }`}
                 >
-                  <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <div className="truncate text-sm font-semibold text-[var(--color-text-main)]">{agent.name}</div>
-                      <div className="mt-1 text-xs text-[var(--color-text-muted)]">{agent.code}</div>
+                      <div className="mt-1 text-xs font-medium uppercase tracking-[0.12em] text-[var(--color-text-subtle)]">
+                        {agent.code}
+                      </div>
                     </div>
                     {active && (
-                      <span className="rounded-full bg-[var(--color-primary)] px-2 py-1 text-[11px] font-semibold text-[var(--color-primary-contrast)]">
-                        선택됨
+                      <span className="rounded-full bg-[var(--color-accent)] px-2.5 py-1 text-[11px] font-semibold text-white">
+                        Active
                       </span>
                     )}
                   </div>
