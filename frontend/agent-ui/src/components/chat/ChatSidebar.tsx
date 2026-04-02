@@ -50,55 +50,77 @@ export default function ChatSidebar({
   onSelectChat,
 }: ChatSidebarProps) {
   return (
-    <aside className="hidden h-full w-[290px] shrink-0 border-r border-[var(--color-border)] bg-[var(--color-sidebar-bg)] lg:block">
-      <div className="flex h-full flex-col">
-        <div className="border-b border-[var(--color-border)] p-3">
-          <div className="space-y-3">
-            <SiteSelect site={site} onChange={onSiteChange} />
+    <aside className="hidden h-full w-[312px] shrink-0 border-r border-[var(--color-border-on-dark)] bg-[var(--color-primary)] lg:block">
+      <div
+        className="flex h-full flex-col"
+        style={{ background: "var(--color-sidebar-bg)", color: "var(--color-text-on-dark)" }}
+      >
+        <div className="border-b border-[var(--color-border-on-dark)] p-5">
+          <div className="mb-5 flex items-center justify-between">
+            <div>
+              <div className="text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--color-text-on-dark-subtle)]">
+                Hyundai AI Chat
+              </div>
+              <div className="mt-2 text-xl font-semibold text-[var(--color-text-on-dark)]">
+                Deep Blue Console
+              </div>
+            </div>
+            <div className="rounded-full border border-[var(--color-border-on-dark)] bg-[var(--color-dark-surface)] px-3 py-1 text-[11px] font-semibold text-[var(--color-text-on-dark-muted)]">
+              LIVE
+            </div>
+          </div>
+
+          <div className="space-y-4 rounded-[24px] border border-[var(--color-border-on-dark)] bg-[var(--color-dark-surface)] p-4 backdrop-blur-xl">
+            <SiteSelect site={site} onChange={onSiteChange} dark />
 
             <div>
-              <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
+              <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-text-on-dark-subtle)]">
                 User ID
               </label>
               <input
                 value={userId}
                 onChange={(e) => onUserIdChange(e.target.value)}
-                className="w-full rounded-xl border border-[var(--color-input-border)] bg-[var(--color-surface)] px-3 py-2.5 text-sm text-[var(--color-text-main)] outline-none transition placeholder:text-[var(--color-text-subtle)] focus:border-[var(--color-primary)]"
+                className="w-full rounded-2xl border-none bg-[var(--color-dark-input)] px-3 py-3 text-sm text-[var(--color-text-on-dark)] shadow-[inset_0_0_0_1px_var(--color-border-on-dark-strong)] outline-none transition placeholder:text-[var(--color-text-on-dark-subtle)] focus:bg-[var(--color-dark-input-hover)] focus:shadow-[inset_0_0_0_1px_var(--color-accent),var(--shadow-focus)]"
                 placeholder="user1"
               />
             </div>
 
-            <input
-              value={chatSearch}
-              onChange={(e) => onChatSearchChange(e.target.value)}
-              className="w-full rounded-xl border border-[var(--color-input-border)] bg-[var(--color-surface)] px-3 py-2.5 text-sm text-[var(--color-text-main)] outline-none transition placeholder:text-[var(--color-text-subtle)] focus:border-[var(--color-primary)]"
-              placeholder="채팅 검색"
-            />
+            <div>
+              <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-text-on-dark-subtle)]">
+                Search
+              </label>
+              <input
+                value={chatSearch}
+                onChange={(e) => onChatSearchChange(e.target.value)}
+                className="w-full rounded-2xl border-none bg-[var(--color-dark-input)] px-3 py-3 text-sm text-[var(--color-text-on-dark)] shadow-[inset_0_0_0_1px_var(--color-border-on-dark-strong)] outline-none transition placeholder:text-[var(--color-text-on-dark-subtle)] focus:bg-[var(--color-dark-input-hover)] focus:shadow-[inset_0_0_0_1px_var(--color-accent),var(--shadow-focus)]"
+                placeholder="채팅 검색"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="p-3">
+        <div className="p-4">
           <button
             onClick={onCreateChat}
-            className="flex w-full items-center justify-center rounded-xl border border-[var(--color-input-border)] bg-[var(--color-surface)] px-4 py-3 text-sm font-medium text-[var(--color-text-main)] transition hover:bg-[var(--color-surface-hover)]"
+            className="flex w-full items-center justify-center rounded-2xl bg-[var(--color-accent)] px-4 py-3.5 text-sm font-bold text-white shadow-[0_12px_28px_rgba(0,127,168,0.25)] transition hover:bg-[var(--color-accent-hover)] active:scale-[0.99]"
           >
-            + 새 채팅
+            + NEW CHAT
           </button>
         </div>
 
-        <div className="flex items-center justify-between px-3 py-3 text-xs text-[var(--color-text-muted)]">
-          <span>{isLoadingChats ? "불러오는 중..." : `${filteredChats.length} chats`}</span>
+        <div className="flex items-center justify-between px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-text-on-dark-subtle)]">
+          <span>{isLoadingChats ? "Syncing..." : `${filteredChats.length} Chats`}</span>
           <button
             onClick={onReloadChats}
-            className="rounded-lg px-2 py-1 transition hover:bg-[var(--color-surface)]"
+            className="rounded-full px-2 py-1 transition hover:bg-[var(--color-dark-surface)] hover:text-[var(--color-text-on-dark)]"
           >
-            새로고침
+            Refresh
           </button>
         </div>
 
-        <div className="flex-1 space-y-1 overflow-y-auto px-2 pb-3">
+        <div className="flex-1 space-y-2 overflow-y-auto px-3 pb-4">
           {filteredChats.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-[var(--color-input-border)] bg-[var(--color-surface)] p-4 text-sm text-[var(--color-text-muted)]">
+            <div className="rounded-[22px] border border-dashed border-[var(--color-border-on-dark-strong)] bg-[var(--color-dark-surface)] p-4 text-sm text-[var(--color-text-on-dark-muted)] backdrop-blur-md">
               채팅이 없습니다.
             </div>
           ) : (
@@ -109,18 +131,18 @@ export default function ChatSidebar({
                 <button
                   key={chat.chat_id}
                   onClick={() => onSelectChat(chat.chat_id)}
-                  className={`w-full rounded-xl px-3 py-3 text-left transition ${
+                  className={`w-full rounded-[20px] px-4 py-4 text-left transition-all duration-200 ${
                     active
-                      ? "bg-[var(--color-surface)] shadow-sm ring-1 ring-[var(--color-border-strong)]"
-                      : "hover:bg-[var(--color-surface)]/80"
+                      ? "bg-[var(--color-dark-surface-active)] shadow-[0_12px_28px_rgba(0,0,0,0.12)] ring-1 ring-[var(--color-accent)]"
+                      : "hover:bg-[var(--color-dark-surface)]"
                   }`}
                 >
-                  <div className="truncate text-sm font-medium text-[var(--color-text-main)]">
+                  <div className={`truncate text-sm font-bold ${active ? "text-white" : "text-[var(--color-text-on-dark-muted)]"}`}>
                     {chat.title || "New Chat"}
                   </div>
-                  <div className="mt-1 truncate text-xs text-[var(--color-text-muted)]">{preview}</div>
-                  <div className="mt-2 flex items-center justify-between text-[11px] text-[var(--color-text-subtle)]">
-                    <span className="truncate">{chat.agent_code || "agent 미지정"}</span>
+                  <div className="mt-1 truncate text-xs text-[var(--color-text-on-dark-subtle)]">{preview}</div>
+                  <div className="mt-3 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.08em] text-[var(--color-text-on-dark-subtle)]">
+                    <span className="max-w-[50%] truncate">{chat.agent_code || "N/A"}</span>
                     <span>{formatDateLabel(chat.updated_at)}</span>
                   </div>
                 </button>
@@ -129,10 +151,10 @@ export default function ChatSidebar({
           )}
         </div>
 
-        <div className="border-t border-[var(--color-border)] p-3 text-xs text-[var(--color-text-muted)]">
-          <div className="rounded-xl bg-[var(--color-surface)] px-3 py-3 ring-1 ring-[var(--color-border)]">
-            <div className="font-medium text-[var(--color-text-main)]">{userId || "user1"}</div>
-            <div className="mt-1">{site}</div>
+        <div className="border-t border-[var(--color-border-on-dark)] p-4">
+          <div className="rounded-[20px] border border-[var(--color-border-on-dark)] bg-[var(--color-dark-surface)] px-4 py-3 backdrop-blur-xl">
+            <div className="text-sm font-semibold text-white">{userId || "user1"}</div>
+            <div className="mt-1 text-xs text-[var(--color-text-on-dark-subtle)]">{site}</div>
           </div>
         </div>
       </div>

@@ -97,7 +97,7 @@ export default function AgentChatDashboard() {
   }
 
   return (
-    <div className="h-screen overflow-hidden bg-[var(--color-app-bg)] text-[var(--color-text-main)]">
+    <div className="h-screen overflow-hidden text-[var(--color-text-main)]" style={{ background: "var(--color-app-bg-gradient)" }}>
       <div className="flex h-full">
         <ChatSidebar
           site={site}
@@ -115,7 +115,7 @@ export default function AgentChatDashboard() {
           onSelectChat={(chatId) => void selectChat(chatId)}
         />
 
-        <section className="flex min-w-0 flex-1 flex-col bg-[var(--color-surface)]">
+        <section className="flex min-w-0 flex-1 flex-col bg-white/24 backdrop-blur-[2px]">
           <ChatHeader
             title={selectedChat?.title || "새 대화"}
             agentName={selectedAgent?.name || "Agent 선택 필요"}
@@ -125,7 +125,7 @@ export default function AgentChatDashboard() {
 
           {error && (
             <div className="mx-auto mt-4 w-full max-w-4xl px-4 md:px-6">
-              <div className="rounded-2xl border border-[var(--color-error-border)] bg-[var(--color-error-bg)] px-4 py-3 text-sm text-[var(--color-error)]">
+              <div className="rounded-[20px] border border-[var(--color-error-border)] bg-[var(--color-error-bg)] px-4 py-3 text-sm text-[var(--color-error)] shadow-[var(--shadow-soft)]">
                 {error}
               </div>
             </div>

@@ -1,0 +1,50 @@
+:root {
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-primary-contrast: #ffffff;
+
+  --color-app-bg: #f7f7f8;
+  --color-chat-bg: #fafafa;
+  --color-sidebar-bg: #f0f1f3;
+  --color-panel-bg: #f6f7f8;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f8fafc;
+  --color-chip-bg: #f8fafc;
+
+  --color-text-main: #1e293b;
+  --color-text-muted: #64748b;
+  --color-text-subtle: #94a3b8;
+
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-input-border: #cbd5e1;
+
+  --color-user-bubble-bg: #334155;
+  --color-user-bubble-text: #ffffff;
+  --color-avatar-assistant-bg: #334155;
+  --color-avatar-assistant-text: #ffffff;
+  --color-avatar-user-bg: #cbd5e1;
+  --color-avatar-user-text: #334155;
+
+  --color-success: #166534;
+  --color-success-bg: #f0fdf4;
+  --color-success-border: #bbf7d0;
+  --color-error: #b91c1c;
+  --color-error-bg: #fff1f2;
+  --color-error-border: #fecdd3;
+
+  --color-shadow-soft: rgba(15, 23, 42, 0.08);
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  background: var(--color-app-bg);
+  color: var(--color-text-main);
+}
+
+body {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
