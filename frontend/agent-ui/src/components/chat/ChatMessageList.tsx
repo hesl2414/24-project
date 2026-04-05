@@ -37,6 +37,17 @@ function parseAssistantPayload(content: string) {
   }
 }
 
+function findSubmittedValueForInput(messages: any[], currentIndex: number) {
+  const nextUser = messages.slice(currentIndex + 1).find((m) => m.role === "user");
+  return nextUser?.content ?? undefined;
+}
+
+function findSubmittedLabel(payload: any, submittedValue?: string) {
+  if (!submittedValue || payload?.input_type !== "select") return undefined;
+  const matched = payload?.input_options?.find((opt: any) => opt.value === submittedValue);
+  return matched?.label;
+}
+
 export default function ChatMessageList({
   selectedChatId,
   selectedChatDetail,
@@ -47,6 +58,8 @@ export default function ChatMessageList({
   onApproveAction,
   onRejectAction,
 }: ChatMessageListProps) {
+  const messages = selectedChatDetail?.messages ?? [];
+
   return (
     <div className="min-h-0 flex-1 overflow-y-auto bg-[var(--color-chat-bg)]">
       <div className="mx-auto flex min-h-full w-full max-w-4xl flex-col px-4 pb-28 pt-6 md:px-6">
@@ -61,13 +74,33 @@ export default function ChatMessageList({
               </p>
             </div>
           </div>
-        ) : selectedChatDetail?.messages?.length ? (
+        ) : messages.length ? (
           <div className="space-y-8">
-            {selectedChatDetail.messages.map((item) => {
+            {messages.map((item, idx) => {
               const isUser = item.role === "user";
-              const assistantPayload = !isUser
-                ? parseAssistantPayload(item.content)
-                : null;
+              const assistantPayload = !isUser ? parseAssistantPayload(item.content) : null;
+              const isLatestMessage = idx === messages.length - 1;
+
+              let normalizedPayload = assistantPayload;
+
+              if (assistantPayload?.requires_input && !isLatestMessage) {
+                const submittedValue = findSubmittedValueForInput(messages, idx);
+                const submittedLabel = findSubmittedLabel(assistantPayload, submittedValue);
+
+                normalizedPayload = {
+                  ...assistantPayload,
+                  submitted_value: submittedValue,
+                  submitted_label: submittedLabel,
+                  interaction_closed: true,
+                };
+              }
+
+              if (assistantPayload?.action_required && !isLatestMessage) {
+                normalizedPayload = {
+                  ...assistantPayload,
+                  interaction_closed: true,
+                };
+              }
 
               return (
                 <div key={item.message_id} className="w-full">
@@ -102,9 +135,10 @@ export default function ChatMessageList({
                       >
                         {isUser ? (
                           <div className="whitespace-pre-wrap">{item.content}</div>
-                        ) : assistantPayload ? (
+                        ) : normalizedPayload ? (
                           <ChatMessage
-                            message={assistantPayload}
+                            message={normalizedPayload}
+                            interactive={isLatestMessage}
                             onSubmitInput={onSubmitInput}
                             onApproveAction={onApproveAction}
                             onRejectAction={onRejectAction}

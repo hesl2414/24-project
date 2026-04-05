@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 type InputOption = {
   label: string;
@@ -11,6 +11,7 @@ type ActionSchema = {
 
 type ChatMessagePayload = {
   assistant_message: string;
+
   action_required?: boolean;
   action_type?: string;
   action_payload?: Record<string, any>;
@@ -24,10 +25,16 @@ type ChatMessagePayload = {
   total_steps?: number;
 
   step_trace?: any[];
+
+  // 이미 처리 완료된 입력/액션 표시용
+  submitted_value?: string;
+  submitted_label?: string;
+  interaction_closed?: boolean;
 };
 
 type ChatMessageProps = {
   message: ChatMessagePayload;
+  interactive?: boolean;
   onSubmitInput?: (payload: { input_key?: string; value: string }) => Promise<void> | void;
   onApproveAction?: (payload: {
     action_type?: string;
@@ -46,6 +53,38 @@ function StepTrace({ trace }: { trace: any[] }) {
         {JSON.stringify(trace, null, 2)}
       </pre>
     </details>
+  );
+}
+
+function SubmittedInputView({
+  message,
+}: {
+  message: ChatMessagePayload;
+}) {
+  const displayValue =
+    message.submitted_label || message.submitted_value || "-";
+
+  return (
+    <div className="mt-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-app-bg)]/50 p-4">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <div className="text-sm font-semibold text-[var(--color-text-main)]">
+          입력 완료
+        </div>
+
+        {message.step && message.total_steps ? (
+          <div className="rounded-full bg-[var(--color-surface)] px-2.5 py-1 text-[11px] font-medium text-[var(--color-text-muted)] ring-1 ring-[var(--color-border)]">
+            {message.step}/{message.total_steps}
+          </div>
+        ) : null}
+      </div>
+
+      <div className="rounded-2xl bg-[var(--color-surface)] p-3 ring-1 ring-[var(--color-border)]">
+        <div className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-muted)]">
+          {message.input_key || "value"}
+        </div>
+        <div className="text-sm text-[var(--color-text-main)]">{displayValue}</div>
+      </div>
+    </div>
   );
 }
 
@@ -124,6 +163,7 @@ function ActionCard({
   message,
   onApproveAction,
   onRejectAction,
+  interactive,
 }: {
   message: ChatMessagePayload;
   onApproveAction?: (payload: {
@@ -131,11 +171,13 @@ function ActionCard({
     payload: Record<string, any>;
   }) => Promise<void> | void;
   onRejectAction?: () => Promise<void> | void;
+  interactive: boolean;
 }) {
   const [payload, setPayload] = useState<Record<string, any>>(message.action_payload || {});
   const editableFields = message.action_schema?.editable_fields || [];
 
   function handleChange(key: string, value: string) {
+    if (!interactive) return;
     setPayload((prev) => ({
       ...prev,
       [key]: value,
@@ -143,6 +185,7 @@ function ActionCard({
   }
 
   async function handleApprove() {
+    if (!interactive) return;
     await onApproveAction?.({
       action_type: message.action_type,
       payload,
@@ -150,6 +193,7 @@ function ActionCard({
   }
 
   async function handleReject() {
+    if (!interactive) return;
     await onRejectAction?.();
   }
 
@@ -174,7 +218,7 @@ function ActionCard({
 
       <div className="space-y-3">
         {Object.entries(payload).map(([key, value]) => {
-          const editable = editableFields.includes(key);
+          const editable = interactive && editableFields.includes(key);
 
           return (
             <div key={key} className="rounded-2xl bg-[var(--color-surface)] p-3 ring-1 ring-[var(--color-border)]">
@@ -198,32 +242,41 @@ function ActionCard({
         })}
       </div>
 
-      <div className="mt-4 flex justify-end gap-2">
-        <button
-          type="button"
-          onClick={() => void handleReject()}
-          className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2 text-sm font-medium text-[var(--color-text-main)] transition hover:bg-[var(--color-app-bg)]"
-        >
-          취소
-        </button>
-        <button
-          type="button"
-          onClick={() => void handleApprove()}
-          className="rounded-2xl bg-[var(--color-primary)] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
-        >
-          승인
-        </button>
-      </div>
+      {interactive ? (
+        <div className="mt-4 flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={() => void handleReject()}
+            className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2 text-sm font-medium text-[var(--color-text-main)] transition hover:bg-[var(--color-app-bg)]"
+          >
+            취소
+          </button>
+          <button
+            type="button"
+            onClick={() => void handleApprove()}
+            className="rounded-2xl bg-[var(--color-primary)] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
+          >
+            승인
+          </button>
+        </div>
+      ) : (
+        <div className="mt-4 rounded-2xl bg-[var(--color-surface)] px-4 py-3 text-xs text-[var(--color-text-muted)] ring-1 ring-[var(--color-border)]">
+          이미 처리된 요청입니다.
+        </div>
+      )}
     </div>
   );
 }
 
 export default function ChatMessage({
   message,
+  interactive = false,
   onSubmitInput,
   onApproveAction,
   onRejectAction,
 }: ChatMessageProps) {
+  const inputClosed = !!message.interaction_closed || !interactive;
+
   return (
     <div>
       <div className="whitespace-pre-wrap break-words text-sm leading-7 text-[var(--color-text-main)]">
@@ -231,7 +284,11 @@ export default function ChatMessage({
       </div>
 
       {message.requires_input ? (
-        <InputCard message={message} onSubmitInput={onSubmitInput} />
+        inputClosed ? (
+          <SubmittedInputView message={message} />
+        ) : (
+          <InputCard message={message} onSubmitInput={onSubmitInput} />
+        )
       ) : null}
 
       {message.action_required ? (
@@ -239,6 +296,7 @@ export default function ChatMessage({
           message={message}
           onApproveAction={onApproveAction}
           onRejectAction={onRejectAction}
+          interactive={interactive}
         />
       ) : null}
 
