@@ -4,36 +4,21 @@ type SiteSelectProps = {
   site: string;
   onChange: (value: string) => void;
   label?: string;
-  dark?: boolean;
 };
 
-export default function SiteSelect({ site, onChange, label = "Site", dark = false }: SiteSelectProps) {
-  const labelClass = dark
-    ? "text-[var(--color-text-on-dark-subtle)]"
-    : "text-[var(--color-text-muted)]";
-
-  const selectClass = dark
-    ? "border-none bg-[var(--color-dark-input)] text-[var(--color-text-on-dark)] shadow-[inset_0_0_0_1px_var(--color-border-on-dark-strong)]"
-    : "border border-[var(--color-input-border)] bg-[var(--color-surface-strong)] text-[var(--color-text-main)] focus:border-[var(--color-accent)] focus:shadow-[var(--shadow-focus)]";
-
+export default function SiteSelect({ site, onChange, label = "Site" }: SiteSelectProps) {
   return (
     <div>
-      <label className={`mb-2 block text-[10px] font-bold uppercase tracking-[0.22em] ${labelClass}`}>
+      <label className="mb-2 block text-xs font-medium uppercase tracking-wide text-[var(--color-text-muted)]">
         {label}
       </label>
       <select
         value={site}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-full rounded-2xl px-3 py-3 text-sm outline-none transition ${selectClass}`}
+        className="w-full rounded-xl border border-[var(--color-input-border)] bg-[var(--color-surface)] px-3 py-2.5 text-sm text-[var(--color-text-main)] outline-none transition focus:border-[var(--color-primary)]"
       >
         {SITE_OPTIONS.map((siteItem) => (
-          <option
-            key={siteItem}
-            value={siteItem}
-            className={dark ? "bg-[#002c5f] text-white" : "bg-white text-slate-900"}
-          >
-            {siteItem}
-          </option>
+          <option key={siteItem}>{siteItem}</option>
         ))}
       </select>
     </div>

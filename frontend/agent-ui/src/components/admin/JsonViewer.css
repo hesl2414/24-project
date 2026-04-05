@@ -1,29 +1,22 @@
 .json-viewer {
-  background: rgba(255, 255, 255, 0.84);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow-soft);
 }
 
 .json-viewer-title {
   padding: 12px 14px;
   border-bottom: 1px solid var(--color-border);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  background: #eef5fa;
+  font-weight: 600;
+  background: var(--color-chat-bg);
 }
 
 .json-viewer pre {
   margin: 0;
   padding: 14px;
   font-size: 12px;
-  line-height: 1.65;
   overflow-x: auto;
   white-space: pre-wrap;
   word-break: break-word;
-  color: var(--color-text-main);
 }
