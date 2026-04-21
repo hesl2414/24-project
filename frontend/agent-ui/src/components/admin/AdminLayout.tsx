@@ -37,6 +37,9 @@ export default function AdminLayout() {
           <NavLink to="/admin/agents" className="admin-nav-link">
             Agents
           </NavLink>
+          <NavLink to="/admin/pending-actions" className="admin-nav-link">
+            Pending Actions
+          </NavLink>
         </nav>
       </aside>
 

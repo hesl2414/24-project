@@ -1,8 +1,8 @@
 export const SITE_OPTIONS = [
   "KOR-SEOUL",
-  "KOR-CHEONAN",
-  "VN-HANOI",
-  "CN-SUZHOU",
+  "KR",
+  "CN",
+  "VN",
   "ADMIN",
 ] as const;
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import WelcomeMessage from "../components/chat/WelcomeMessage";
+import WelcomeMessage from "./WelcomeMessage";
 import { useNavigate } from "react-router-dom";
 import AgentSidebar from "../components/chat/AgentSidebar";
 import ChatComposer from "../components/chat/ChatComposer";
@@ -94,7 +94,7 @@ export default function AgentChatDashboard() {
             input_type:        payload.input_type        ?? "text",
             input_key:         payload.input_key         ?? undefined,
             input_options:     payload.input_options     ?? undefined,
-            input_fields:      payload.input_fields      ?? undefined,    
+            input_fields:      payload.input_fields      ?? undefined,
             assistant_message: payload.assistant_message ?? "",
           };
         }

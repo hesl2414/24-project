@@ -9,6 +9,7 @@ import ChatDetailPage from "../pages/admin/ChatDetailPage";
 import RunListPage from "../pages/admin/RunListPage";
 import RunDetailPage from "../pages/admin/RunDetailPage";
 import AgentListPage from "../pages/admin/AgentListPage";
+import AdminPendingActions from "../pages/admin/AdminPendingActions";
 
 export default function AdminRouter() {
   return (
@@ -21,6 +22,7 @@ export default function AdminRouter() {
         <Route path="runs" element={<RunListPage />} />
         <Route path="runs/:runId" element={<RunDetailPage />} />
         <Route path="agents" element={<AgentListPage />} />
+        <Route path="pending-actions" element={<AdminPendingActions />} />
       </Route>
     </Routes>
   );
