@@ -52,4 +52,6 @@ export type InvokeAgentRequest = {
   user_id: string;
   message: string;
   chat_id?: string | null;
+  site_code?: string | null;
+  pgm_id?:  string | null;   // Welcome 버튼 클릭 시 주입
 };

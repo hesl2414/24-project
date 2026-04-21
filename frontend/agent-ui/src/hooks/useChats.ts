@@ -41,7 +41,7 @@ export function useChats({
     void loadChats(userId);
   }, [userId]);
 
-  async function loadChatDetail(chatId: string, focus = true) {
+  async function loadChatDetail(chatId: string, focus = true, updateAgent = false) {
     try {
       setError(null);
       const data = await getChatDetail(chatId);
@@ -53,9 +53,10 @@ export function useChats({
 
       if (focus) {
         setSelectedChatId(chatId);
-        if (data.session.agent_code) {
-          setSelectedAgentCode(data.session.agent_code);
-        }
+      }
+
+      if (updateAgent && data.session.agent_code) {
+        setSelectedAgentCode(data.session.agent_code);
       }
 
       return data;
@@ -101,7 +102,7 @@ export function useChats({
   }
 
   async function selectChat(chatId: string) {
-    await loadChatDetail(chatId, true);
+    await loadChatDetail(chatId, true, true);
   }
 
   async function createNewChat() {
@@ -116,14 +117,14 @@ export function useChats({
       });
 
       await loadChats(userId);
-      await loadChatDetail(created.chat_id, true);
+      await loadChatDetail(created.chat_id, true, true);
       setMessage("");
     } catch (err) {
       setError(err instanceof Error ? err.message : "새 채팅 생성 실패");
     }
   }
 
-  async function sendMessage() {
+  async function sendMessage(pgmId?: string) {
     const trimmed = message.trim();
     if (!trimmed) return;
 
@@ -141,6 +142,7 @@ export function useChats({
         message: trimmed,
         chat_id: selectedChatId,
         site_code: site,
+        pgm_id:   pgmId ?? null,
       });
 
       setMessage("");
