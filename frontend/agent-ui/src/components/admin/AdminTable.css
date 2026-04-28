@@ -1,10 +1,8 @@
 .admin-table-wrap {
-  background: rgba(255, 255, 255, 0.84);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 20px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: var(--shadow-card);
-  backdrop-filter: blur(12px);
 }
 
 .admin-table {
@@ -14,30 +12,17 @@
 
 .admin-table th {
   text-align: left;
-  background: #eef5fa;
+  background: var(--color-chat-bg);
   border-bottom: 1px solid var(--color-border);
-  padding: 14px 16px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
+  padding: 12px;
+  font-size: 13px;
 }
 
 .admin-table td {
-  border-bottom: 1px solid rgba(0, 44, 95, 0.06);
-  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+  padding: 12px;
   vertical-align: top;
   font-size: 14px;
-  color: var(--color-text-main);
-}
-
-.admin-table tbody tr {
-  transition: background 0.18s ease;
-}
-
-.admin-table tbody tr:hover {
-  background: rgba(0, 127, 168, 0.04);
 }
 
 .admin-table tr:last-child td {
@@ -45,11 +30,11 @@
 }
 
 .admin-table a {
-  color: var(--color-primary);
-  font-weight: 700;
+  color: var(--color-text-main);
+  font-weight: 600;
   text-decoration: none;
 }
 
 .admin-table a:hover {
-  color: var(--color-accent);
+  text-decoration: underline;
 }

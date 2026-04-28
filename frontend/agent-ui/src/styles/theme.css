@@ -1,94 +1,39 @@
 :root {
-  /* =========================
-     Hyundai Deep Blue System
-  ========================= */
-  --color-primary: #002c5f;
-  --color-primary-hover: #001f45;
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
   --color-primary-contrast: #ffffff;
 
-  --color-accent: #007fa8;
-  --color-accent-hover: #006b8d;
-  --color-accent-soft: #d9eef5;
+  --color-app-bg: #f7f7f8;
+  --color-chat-bg: #fafafa;
+  --color-sidebar-bg: #f0f1f3;
+  --color-panel-bg: #f6f7f8;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f8fafc;
+  --color-chip-bg: #f8fafc;
 
-  /* =========================
-     App Background
-  ========================= */
-  --color-app-bg: #edf4f9;
-  --color-app-bg-gradient: linear-gradient(180deg, #edf4f9 0%, #e7eff6 100%);
-  --color-chat-bg: #f6f9fc;
-  --color-sidebar-bg: linear-gradient(180deg, #002c5f 0%, #003469 100%);
-  --color-panel-bg: #eff5fa;
-  --color-surface: rgba(255, 255, 255, 0.88);
-  --color-surface-strong: #ffffff;
-  --color-surface-hover: rgba(255, 255, 255, 0.96);
-  --color-chip-bg: #e7f2f8;
+  --color-text-main: #1e293b;
+  --color-text-muted: #64748b;
+  --color-text-subtle: #94a3b8;
 
-  /* =========================
-     Text
-  ========================= */
-  --color-text-main: #102033;
-  --color-text-muted: #5e7288;
-  --color-text-subtle: #8da0b4;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-input-border: #cbd5e1;
 
-  --color-text-on-dark: #ffffff;
-  --color-text-on-dark-muted: rgba(255, 255, 255, 0.84);
-  --color-text-on-dark-subtle: rgba(255, 255, 255, 0.58);
-
-  /* =========================
-     Border
-  ========================= */
-  --color-border: rgba(0, 44, 95, 0.08);
-  --color-border-strong: rgba(0, 44, 95, 0.14);
-  --color-input-border: rgba(0, 44, 95, 0.14);
-
-  --color-border-on-dark: rgba(255, 255, 255, 0.12);
-  --color-border-on-dark-strong: rgba(255, 255, 255, 0.22);
-
-  /* =========================
-     Dark Surface
-  ========================= */
-  --color-dark-surface: rgba(255, 255, 255, 0.08);
-  --color-dark-surface-hover: rgba(255, 255, 255, 0.12);
-  --color-dark-surface-active: rgba(255, 255, 255, 0.16);
-  --color-dark-input: rgba(255, 255, 255, 0.1);
-  --color-dark-input-hover: rgba(255, 255, 255, 0.14);
-
-  /* =========================
-     Chat UI
-  ========================= */
-  --color-user-bubble-bg: linear-gradient(135deg, #002c5f 0%, #003d7a 100%);
+  --color-user-bubble-bg: #334155;
   --color-user-bubble-text: #ffffff;
-
-  --color-assistant-bubble-bg: rgba(255, 255, 255, 0.92);
-  --color-assistant-bubble-text: #102033;
-
-  --color-avatar-assistant-bg: #002c5f;
+  --color-avatar-assistant-bg: #334155;
   --color-avatar-assistant-text: #ffffff;
-  --color-avatar-user-bg: #007fa8;
-  --color-avatar-user-text: #ffffff;
+  --color-avatar-user-bg: #cbd5e1;
+  --color-avatar-user-text: #334155;
 
-  /* =========================
-     Status
-  ========================= */
-  --color-success: #0f766e;
-  --color-success-bg: #ecfdf5;
-  --color-success-border: #a7f3d0;
-
+  --color-success: #166534;
+  --color-success-bg: #f0fdf4;
+  --color-success-border: #bbf7d0;
   --color-error: #b91c1c;
   --color-error-bg: #fff1f2;
   --color-error-border: #fecdd3;
 
-  /* =========================
-     Radius / Shadow
-  ========================= */
-  --radius-sm: 12px;
-  --radius-md: 16px;
-  --radius-lg: 20px;
-  --radius-xl: 24px;
-
-  --shadow-soft: 0 10px 30px rgba(0, 44, 95, 0.08);
-  --shadow-card: 0 12px 40px rgba(0, 44, 95, 0.1);
-  --shadow-focus: 0 0 0 4px rgba(0, 127, 168, 0.16);
+  --color-shadow-soft: rgba(15, 23, 42, 0.08);
 }
 
 html,
@@ -101,23 +46,5 @@ body,
 }
 
 body {
-  font-family: Inter, "Pretendard", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-*::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-*::-webkit-scrollbar-thumb {
-  background: rgba(0, 44, 95, 0.18);
-  border-radius: 999px;
-}
-
-*::-webkit-scrollbar-track {
-  background: transparent;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }

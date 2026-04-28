@@ -1,28 +1,23 @@
 .section-card {
-  background: rgba(255, 255, 255, 0.84);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 22px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: var(--shadow-card);
-  backdrop-filter: blur(12px);
 }
 
 .section-card-header {
-  padding: 16px 18px;
+  padding: 14px 16px;
   border-bottom: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(238,245,250,0.72) 100%);
 }
 
 .section-card-header h3 {
   margin: 0;
-  font-size: 17px;
-  letter-spacing: -0.01em;
+  font-size: 16px;
 }
 
 .section-card-body {
-  padding: 18px;
+  padding: 16px;
 }

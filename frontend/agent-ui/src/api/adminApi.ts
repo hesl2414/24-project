@@ -10,7 +10,7 @@ import type {
   RunStepItem,
 } from "../types/admin";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE}${url}`, {
@@ -51,13 +51,13 @@ export interface RunListParams {
 
 export const adminApi = {
   getDashboardSummary: () =>
-    request<DashboardSummary>("/admin/dashboard/summary"),
+    request<DashboardSummary>("/api/admin/dashboard/summary"),
 
   getRecentRuns: () =>
-    request<RunLogItem[]>("/admin/dashboard/recent-runs"),
+    request<RunLogItem[]>("/api/admin/dashboard/recent-runs"),
 
   getRecentChats: () =>
-    request<ChatSessionItem[]>("/admin/dashboard/recent-chats"),
+    request<ChatSessionItem[]>("/api/admin/dashboard/recent-chats"),
 
   getChats: (params: ChatListParams) => {
     const searchParams = new URLSearchParams();
@@ -69,15 +69,15 @@ export const adminApi = {
     if (params.keyword) searchParams.set("keyword", params.keyword);
 
     return request<PaginatedResponse<ChatSessionItem>>(
-      `/admin/chats?${searchParams.toString()}`
+      `/api/admin/chats?${searchParams.toString()}`
     );
   },
 
   getChatDetail: (chatId: string) =>
-    request<ChatSessionDetail>(`/admin/chats/${chatId}`),
+    request<ChatSessionDetail>(`/api/admin/chats/${chatId}`),
 
   getChatMessages: (chatId: string) =>
-    request<ChatMessageItem[]>(`/admin/chats/${chatId}/messages`),
+    request<ChatMessageItem[]>(`/api/admin/chats/${chatId}/messages`),
 
   getRuns: (params: RunListParams) => {
     const searchParams = new URLSearchParams();
@@ -91,15 +91,15 @@ export const adminApi = {
     if (params.dateTo) searchParams.set("date_to", params.dateTo);
 
     return request<PaginatedResponse<RunLogItem>>(
-      `/admin/runs?${searchParams.toString()}`
+      `/api/admin/runs?${searchParams.toString()}`
     );
   },
 
   getRunDetail: (runId: string) =>
-    request<RunLogDetail>(`/admin/runs/${runId}`),
+    request<RunLogDetail>(`/api/admin/runs/${runId}`),
 
   getRunSteps: (runId: string) =>
-    request<RunStepItem[]>(`/admin/runs/${runId}/steps`),
+    request<RunStepItem[]>(`/api/admin/runs/${runId}/steps`),
 
-  getAgents: () => request<AgentStatItem[]>("/admin/agents"),
+  getAgents: () => request<AgentStatItem[]>("/api/admin/agents"),
 };

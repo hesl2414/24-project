@@ -1,40 +1,37 @@
 .run-timeline {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .run-step {
   display: flex;
-  gap: 16px;
+  gap: 14px;
 }
 
 .run-step-left {
-  width: 48px;
+  width: 40px;
   display: flex;
   justify-content: center;
 }
 
 .run-step-order {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #002c5f 0%, #007fa8 100%);
-  color: white;
+  background: var(--color-chip-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  box-shadow: var(--shadow-soft);
+  font-weight: 700;
 }
 
 .run-step-right {
   flex: 1;
-  background: rgba(255, 255, 255, 0.88);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 20px;
-  padding: 18px;
-  box-shadow: var(--shadow-soft);
+  border-radius: 14px;
+  padding: 14px;
 }
 
 .run-step-header {
@@ -54,20 +51,19 @@
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  margin-top: 10px;
+  margin-top: 8px;
   color: var(--color-text-muted);
   font-size: 12px;
 }
 
 .run-step-error {
-  margin-top: 12px;
+  margin-top: 10px;
   color: var(--color-error);
   font-size: 13px;
-  line-height: 1.6;
 }
 
 .run-step-json-grid {
-  margin-top: 14px;
+  margin-top: 12px;
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
